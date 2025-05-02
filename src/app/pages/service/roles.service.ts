@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { CreateRoleDto, Role } from '../../models/roles.model';
+import { CreateRoleDto, Role, UpdateRoleDto } from '../../models/roles.model';
 
 @Injectable({
     providedIn: 'root'
@@ -19,12 +19,12 @@ export class RoleService {
     // }
 
     createRole(role: CreateRoleDto) {
-        return this._http.post(this.apiUrl, role);
+        return this._http.post<Role>(this.apiUrl, role);
     }
 
-    // updateRole(id: number, role: any) {
-    //     return this.http.put(`${this.apiUrl}/${id}`, role);
-    // }
+    updateRole(id: number, role: UpdateRoleDto) {
+        return this._http.put<Role>(`${this.apiUrl}/${id}`, role);
+    }
 
     deleteRole(id: number) {
         return this._http.delete(`${this.apiUrl}/${id}`);

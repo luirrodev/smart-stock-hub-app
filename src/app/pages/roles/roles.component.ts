@@ -6,7 +6,7 @@ import { Table, TableModule } from 'primeng/table';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
-import { Role } from '../../models/roles.model';
+import { Role, UpdateRoleDto } from '../../models/roles.model';
 import { RoleService } from '../service/roles.service';
 import { DialogModule } from 'primeng/dialog';
 import { CommonModule } from '@angular/common';
@@ -36,6 +36,7 @@ export class RolesComponent implements OnInit {
     cols!: Column[];
     role!: Role;
     roles = signal<Role[]>([]);
+    isEditMode: boolean = false;
     roleDialog: boolean = false;
     submitted: boolean = false;
 
@@ -53,8 +54,10 @@ export class RolesComponent implements OnInit {
         table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
     }
 
-    editProduct(product: Role) {
-        console.log('editProduct clicked', product);
+    editProduct(role: Role) {
+        this.role = { ...role };
+        this.isEditMode = true;
+        this.roleDialog = true;
     }
 
     deleteRole(role: Role) {
@@ -90,6 +93,28 @@ export class RolesComponent implements OnInit {
 
     saveRole() {
         this.submitted = true;
+
+        if (this.isEditMode) {
+            let roleData: UpdateRoleDto = {
+                description: this.role.description
+            };
+
+            this.roleService.updateRole(this.role.id!, roleData).subscribe((data) => {
+                this.roles.update((prev) => prev.map((r) => (r.id === data.id ? data : r)));
+                this.roleDialog = false;
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Exitoso',
+                    detail: `Rol ${this.role.name} actualizado exitosamente`,
+                    icon: 'pi pi-check',
+                    life: 3000
+                });
+                this.role = {};
+                this.isEditMode = false;
+            });
+
+            return;
+        }
 
         let roleData: CreateRoleDto = {
             name: this.role.name!,

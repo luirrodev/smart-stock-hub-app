@@ -57,7 +57,7 @@
         <div class="flex flex-col gap-6">
             <div>
                 <label for="name" class="block font-bold mb-3">Nombre</label>
-                <input type="text" pInputText id="name" [(ngModel)]="role.name" required autofocus fluid />
+                <input type="text" [disabled]="this.isEditMode" pInputText id="name" [(ngModel)]="role.name" required autofocus fluid />
                 <small class="text-red-500" *ngIf="submitted && !role.name">El campo nombre es obligatorio.</small>
             </div>
             <div>

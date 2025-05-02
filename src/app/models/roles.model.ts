@@ -8,3 +8,7 @@ export interface CreateRoleDto {
     name: string;
     description?: string;
 }
+
+export interface UpdateRoleDto {
+    description?: string;
+}
