@@ -8,6 +8,9 @@ import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { Role } from '../../models/roles.model';
 import { RoleService } from '../service/roles.service';
+import { DialogModule } from 'primeng/dialog';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 interface Column {
     field: string;
@@ -16,23 +19,28 @@ interface Column {
 }
 @Component({
     selector: 'app-roles',
-    imports: [ToolbarModule, ButtonModule, TableModule, IconFieldModule, InputIconModule, InputTextModule],
+    imports: [FormsModule, CommonModule, ToolbarModule, ButtonModule, TableModule, IconFieldModule, InputIconModule, InputTextModule, DialogModule],
     templateUrl: './roles.component.html',
     styleUrl: './roles.component.scss',
     providers: [MessageService, ConfirmationService]
 })
 export class RolesComponent implements OnInit {
     roleService = inject(RoleService);
+
+    cols!: Column[];
     role!: Role;
     roles = signal<Role[]>([]);
-    cols!: Column[];
+    roleDialog: boolean = false;
+    submitted: boolean = false;
 
     ngOnInit(): void {
         this.loadRoles();
     }
 
     openNew() {
-        console.log('openNew button clicked');
+        this.role = {};
+        this.submitted = false;
+        this.roleDialog = true;
     }
 
     onGlobalFilter(table: Table, event: Event) {
@@ -51,5 +59,14 @@ export class RolesComponent implements OnInit {
         this.roleService.getAllRoles().subscribe((data) => {
             this.roles.set(data);
         });
+    }
+
+    hideDialog() {
+        this.roleDialog = false;
+        this.submitted = false;
+    }
+
+    saveRole() {
+        console.log('saveRole clicked');
     }
 }
