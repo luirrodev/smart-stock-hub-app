@@ -12,6 +12,9 @@ import { DialogModule } from 'primeng/dialog';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CreateRoleDto } from '../../models/roles.model';
+import { MessageModule } from 'primeng/message';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ToastModule } from 'primeng/toast';
 
 interface Column {
     field: string;
@@ -20,13 +23,15 @@ interface Column {
 }
 @Component({
     selector: 'app-roles',
-    imports: [FormsModule, CommonModule, ToolbarModule, ButtonModule, TableModule, IconFieldModule, InputIconModule, InputTextModule, DialogModule],
+    imports: [ToastModule, ConfirmDialogModule, MessageModule, FormsModule, CommonModule, ToolbarModule, ButtonModule, TableModule, IconFieldModule, InputIconModule, InputTextModule, DialogModule],
     templateUrl: './roles.component.html',
     styleUrl: './roles.component.scss',
     providers: [MessageService, ConfirmationService]
 })
 export class RolesComponent implements OnInit {
     roleService = inject(RoleService);
+    messageService = inject(MessageService);
+    confirmationService = inject(ConfirmationService);
 
     cols!: Column[];
     role!: Role;
@@ -52,8 +57,22 @@ export class RolesComponent implements OnInit {
         console.log('editProduct clicked', product);
     }
 
-    deleteProduct(product: Role) {
-        console.log('deleteProduct clicked', product);
+    deleteRole(role: Role) {
+        this.confirmationService.confirm({
+            message: '¿Estás seguro de que quieres eliminar este rol?',
+            header: 'Confirmar',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this.roles.update((prev) => prev.filter((r) => r.id !== role.id));
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Exitoso',
+                    detail: `Rol ${role.name} eliminado`,
+                    icon: 'pi pi-check',
+                    life: 3000
+                });
+            }
+        });
     }
 
     loadRoles() {
@@ -79,6 +98,13 @@ export class RolesComponent implements OnInit {
             this.roles.update((prev) => [...prev, data]);
             this.roleDialog = false;
             this.role = {};
+            this.messageService.add({
+                severity: 'success',
+                summary: 'Exitoso',
+                detail: `Rol ${roleData.name} creado exitosamente`,
+                icon: 'pi pi-check',
+                life: 3000
+            });
         });
     }
 }
