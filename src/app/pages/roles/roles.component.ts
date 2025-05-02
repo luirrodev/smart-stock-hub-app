@@ -25,7 +25,6 @@ interface Column {
     selector: 'app-roles',
     imports: [ToastModule, ConfirmDialogModule, MessageModule, FormsModule, CommonModule, ToolbarModule, ButtonModule, TableModule, IconFieldModule, InputIconModule, InputTextModule, DialogModule],
     templateUrl: './roles.component.html',
-    styleUrl: './roles.component.scss',
     providers: [MessageService, ConfirmationService]
 })
 export class RolesComponent implements OnInit {
