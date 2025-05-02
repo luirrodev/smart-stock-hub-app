@@ -1,13 +1,13 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ButtonModule } from 'primeng/button';
-import { Product, ProductService } from '../service/product.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table, TableModule } from 'primeng/table';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
-import { CurrencyPipe } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
+import { Role } from '../../models/roles.model';
+import { RoleService } from '../service/roles.service';
 
 interface Column {
     field: string;
@@ -21,13 +21,15 @@ interface Column {
     styleUrl: './roles.component.scss',
     providers: [MessageService, ConfirmationService]
 })
-export class RolesComponent {
-    constructor() {}
-
-    product!: Product;
-    products = signal<Product[]>([]);
-    selectedProducts!: Product[] | null;
+export class RolesComponent implements OnInit {
+    roleService = inject(RoleService);
+    role!: Role;
+    roles = signal<Role[]>([]);
     cols!: Column[];
+
+    ngOnInit(): void {
+        this.loadRoles();
+    }
 
     openNew() {
         console.log('openNew button clicked');
@@ -37,11 +39,17 @@ export class RolesComponent {
         table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
     }
 
-    editProduct(product: Product) {
+    editProduct(product: Role) {
         console.log('editProduct clicked', product);
     }
 
-    deleteProduct(product: Product) {
+    deleteProduct(product: Role) {
         console.log('deleteProduct clicked', product);
+    }
+
+    loadRoles() {
+        this.roleService.getAllRoles().subscribe((data) => {
+            this.roles.set(data);
+        });
     }
 }

@@ -6,22 +6,21 @@
 
 <p-table
     #dt
-    [value]="products()"
-    [rows]="10"
+    [value]="roles()"
+    [rows]="5"
     [columns]="cols"
     [paginator]="true"
-    [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']"
+    [globalFilterFields]="['name', 'description']"
     [tableStyle]="{ 'min-width': '75rem' }"
-    [(selection)]="selectedProducts"
     [rowHover]="true"
     dataKey="id"
     currentPageReportTemplate="Mostrando de {first} a {last} de {totalRecords} roles"
     [showCurrentPageReport]="true"
-    [rowsPerPageOptions]="[10, 20, 30]"
+    [rowsPerPageOptions]="[5, 10, 15]"
 >
     <ng-template #caption>
         <div class="flex items-center justify-between">
-            <h5 class="m-0">Manage Products</h5>
+            <h5 class="m-0">Administrar Roles</h5>
             <p-iconfield>
                 <p-inputicon styleClass="pi pi-search" />
                 <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..." />
@@ -38,13 +37,13 @@
             <th pSortableColumn="name" style="min-width: 16rem">Acciones</th>
         </tr>
     </ng-template>
-    <ng-template #body let-product>
+    <ng-template #body let-role>
         <tr>
-            <td style="min-width: 12rem">{{ product.code }}</td>
-            <td style="min-width: 16rem">{{ product.name }}</td>
+            <td style="min-width: 16rem">{{ role.name }}</td>
+            <td style="min-width: 16rem">{{ role.description }}</td>
             <td>
-                <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" (click)="editProduct(product)" />
-                <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true" (click)="deleteProduct(product)" />
+                <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" (click)="editProduct(role)" />
+                <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true" (click)="deleteProduct(role)" />
             </td>
         </tr>
     </ng-template>
