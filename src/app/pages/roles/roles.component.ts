@@ -11,6 +11,7 @@ import { RoleService } from '../service/roles.service';
 import { DialogModule } from 'primeng/dialog';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { CreateRoleDto } from '../../models/roles.model';
 
 interface Column {
     field: string;
@@ -67,6 +68,17 @@ export class RolesComponent implements OnInit {
     }
 
     saveRole() {
-        console.log('saveRole clicked');
+        this.submitted = true;
+
+        let roleData: CreateRoleDto = {
+            name: this.role.name!,
+            description: this.role.description!
+        };
+
+        this.roleService.createRole(roleData).subscribe((data) => {
+            this.roles.update((prev) => [...prev, data]);
+            this.roleDialog = false;
+            this.role = {};
+        });
     }
 }
