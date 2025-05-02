@@ -6,5 +6,5 @@ export interface Role {
 
 export interface CreateRoleDto {
     name: string;
-    description: string;
+    description?: string;
 }
