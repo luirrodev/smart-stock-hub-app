@@ -26,7 +26,7 @@ export class RoleService {
     //     return this.http.put(`${this.apiUrl}/${id}`, role);
     // }
 
-    // deleteRole(id: number) {
-    //     return this.http.delete(`${this.apiUrl}/${id}`);
-    // }
+    deleteRole(id: number) {
+        return this._http.delete(`${this.apiUrl}/${id}`);
+    }
 }

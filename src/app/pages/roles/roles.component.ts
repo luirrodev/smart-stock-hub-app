@@ -63,13 +63,15 @@ export class RolesComponent implements OnInit {
             header: 'Confirmar',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
-                this.roles.update((prev) => prev.filter((r) => r.id !== role.id));
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Exitoso',
-                    detail: `Rol ${role.name} eliminado`,
-                    icon: 'pi pi-check',
-                    life: 3000
+                this.roleService.deleteRole(role.id!).subscribe(() => {
+                    this.roles.update((prev) => prev.filter((r) => r.id !== role.id));
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Exitoso',
+                        detail: `Rol ${role.name} eliminado`,
+                        icon: 'pi pi-check',
+                        life: 3000
+                    });
                 });
             }
         });
