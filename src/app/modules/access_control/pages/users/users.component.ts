@@ -33,7 +33,6 @@ export class UsersComponent implements OnInit {
     loadUsers() {
         this.userService.getAllUsers().subscribe((users) => {
             this.users.set(users);
-            console.log(this.users());
         });
     }
 
