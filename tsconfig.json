@@ -21,6 +21,7 @@
             "@env/*": ["./src/environments/*"],
             "@guards/*": ["./src/app/guards/*"],
             "@services/*": ["./src/app/services/*"],
+            "@models/*": ["./src/app/models/*"],
         }
     },
     "angularCompilerOptions": {
