@@ -4,6 +4,7 @@ import { environment } from '@env/environment.development';
 import { tap } from 'rxjs';
 import { TokenService } from './token.service';
 import { ResponseLogin } from '../models/auth.model';
+import { User } from '@models/user.model';
 
 @Injectable({
     providedIn: 'root'
@@ -28,5 +29,9 @@ export class AuthService {
 
     logout() {
         this.tokenService.removeToken();
+    }
+
+    profile() {
+        return this._http.get<User>(`${environment.apiUrl}/auth/profile`);
     }
 }

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
@@ -9,6 +9,7 @@ import { StyleClassModule } from 'primeng/styleclass';
 import { AppConfigurator } from './app.configurator';
 import { LayoutService } from '../service/layout.service';
 import { AuthService } from '@services/auth.service';
+import { User } from '@models/user.model';
 
 @Component({
     selector: 'app-topbar',
@@ -72,29 +73,41 @@ import { AuthService } from '@services/auth.service';
                         <i class="pi pi-calendar"></i>
                         <span>Calendar</span>
                     </button> -->
-                    <button type="button" class="layout-topbar-action">
-                        <i class="pi pi-user"></i>
-                        <span>Profile</span>
-                    </button>
                     <!-- <button type="button" class="layout-topbar-action">
                         <i class="pi pi-inbox"></i>
                         <span>Messages</span>
                     </button> -->
-                    <button pTooltip="Cerrar Sesión" tooltipPosition="left" type="button" class="layout-topbar-action" (click)="onLogout()">
-                        <i class="pi pi-sign-out"></i>
-                        <span>Logout</span>
-                    </button>
+                    @if (user()) {
+                        <button type="button" class="layout-topbar-action">
+                            <i class="pi pi-user"></i>
+                            <span>{{ user()?.name }}</span>
+                        </button>
+                    } @else {
+                        <button pTooltip="Cerrar Sesión" tooltipPosition="left" type="button" class="layout-topbar-action" (click)="onLogout()">
+                            <i class="pi pi-sign-out"></i>
+                            <span>Logout</span>
+                        </button>
+                    }
                 </div>
             </div>
         </div>
     </div>`
 })
-export class AppTopbar {
+export class AppTopbar implements OnInit {
     private readonly authService = inject(AuthService);
     private readonly router = inject(Router);
+
+    user = signal<User | null>(null);
+
     items!: MenuItem[];
 
     constructor(public layoutService: LayoutService) {}
+
+    ngOnInit(): void {
+        this.authService.profile().subscribe((user) => {
+            this.user.set(user);
+        });
+    }
 
     toggleDarkMode() {
         this.layoutService.layoutConfig.update((state) => ({ ...state, darkTheme: !state.darkTheme }));
