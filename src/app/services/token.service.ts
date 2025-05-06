@@ -23,6 +23,21 @@ export class TokenService {
         removeCookie('stock-access-token');
     }
 
+    saveRefreshToken(token: string) {
+        setCookie('stock-refresh-token', token, {
+            expires: 1,
+            path: '/'
+        });
+    }
+
+    getRefreshToken() {
+        return getCookie('stock-refresh-token');
+    }
+
+    removeRefreshToken() {
+        removeCookie('stock-refresh-token');
+    }
+
     isValidToken() {
         const token = this.getToken();
         if (!token) {

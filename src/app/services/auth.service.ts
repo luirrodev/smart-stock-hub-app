@@ -24,6 +24,7 @@ export class AuthService {
             .pipe(
                 tap((response) => {
                     this.tokenService.saveToken(response.access_token);
+                    this.tokenService.saveRefreshToken(response.refresh_token);
                 })
             );
     }
@@ -34,5 +35,17 @@ export class AuthService {
 
     profile() {
         return this._http.get<User>(`${environment.apiUrl}/auth/profile`, { context: checkToken() });
+    }
+
+    refreshToken() {
+        return this._http
+            .post<ResponseLogin>(`${environment.apiUrl}/auth/refresh`, {
+                refresh_token: this.tokenService.getRefreshToken()
+            })
+            .pipe(
+                tap((response) => {
+                    this.tokenService.saveToken(response.access_token);
+                })
+            );
     }
 }
