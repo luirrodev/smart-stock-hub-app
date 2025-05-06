@@ -1,0 +1,9 @@
+<form class="mt-4">
+    <label for="email" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Correo Electrónico: </label>
+    <input pInputText id="email" type="text" placeholder="email@admin.com " class="w-full md:w-[30rem] mb-8" [(ngModel)]="email" />
+
+    <label for="password" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Contraseña:</label>
+    <p-password id="password" [(ngModel)]="password" placeholder="my_secret_password" [toggleMask]="true" styleClass="mb-4" [fluid]="true" [feedback]="false"></p-password>
+
+    <p-button label="Iniciar Sesión" styleClass="w-full mt-4" routerLink="/"></p-button>
+</form>
