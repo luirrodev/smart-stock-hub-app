@@ -2,7 +2,8 @@ import { Routes } from '@angular/router';
 import { AppLayout } from './app/layout/component/app.layout';
 import { Dashboard } from './app/pages/dashboard/dashboard';
 import { Notfound } from './app/pages/notfound/notfound';
-import { authGuard } from './app/guards/auth.guard';
+import { authGuard } from '@guards/auth.guard';
+import { redirectGuard } from '@guards/redirect.guard';
 
 export const appRoutes: Routes = [
     {
@@ -14,7 +15,11 @@ export const appRoutes: Routes = [
             { path: 'pages', loadChildren: () => import('./app/pages/pages.routes') }
         ]
     },
-    { path: 'auth', loadChildren: () => import('./app/modules/auth/auth.routes') },
+    {
+        path: 'auth',
+        canActivate: [redirectGuard],
+        loadChildren: () => import('./app/modules/auth/auth.routes')
+    },
     { path: 'notfound', component: Notfound },
     { path: '**', redirectTo: '/notfound' }
 ];
