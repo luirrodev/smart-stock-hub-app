@@ -1,15 +1,19 @@
-import { Component } from '@angular/core';
-import { MenuItem } from 'primeng/api';
-import { RouterModule } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+
+import { MenuItem } from 'primeng/api';
+import { TooltipModule } from 'primeng/tooltip';
 import { StyleClassModule } from 'primeng/styleclass';
+
 import { AppConfigurator } from './app.configurator';
 import { LayoutService } from '../service/layout.service';
+import { AuthService } from '@services/auth.service';
 
 @Component({
     selector: 'app-topbar',
     standalone: true,
-    imports: [RouterModule, CommonModule, StyleClassModule, AppConfigurator],
+    imports: [TooltipModule, RouterModule, CommonModule, StyleClassModule, AppConfigurator],
     template: ` <div class="layout-topbar">
         <div class="layout-topbar-logo-container">
             <button class="layout-menu-button layout-topbar-action" (click)="layoutService.onMenuToggle()">
@@ -33,7 +37,7 @@ import { LayoutService } from '../service/layout.service';
                         />
                     </g>
                 </svg>
-                <span>SAKAI</span>
+                <span>SmartStock</span>
             </a>
         </div>
 
@@ -64,17 +68,21 @@ import { LayoutService } from '../service/layout.service';
 
             <div class="layout-topbar-menu hidden lg:block">
                 <div class="layout-topbar-menu-content">
-                    <button type="button" class="layout-topbar-action">
+                    <!-- <button type="button" class="layout-topbar-action">
                         <i class="pi pi-calendar"></i>
                         <span>Calendar</span>
-                    </button>
-                    <button type="button" class="layout-topbar-action">
-                        <i class="pi pi-inbox"></i>
-                        <span>Messages</span>
-                    </button>
+                    </button> -->
                     <button type="button" class="layout-topbar-action">
                         <i class="pi pi-user"></i>
                         <span>Profile</span>
+                    </button>
+                    <!-- <button type="button" class="layout-topbar-action">
+                        <i class="pi pi-inbox"></i>
+                        <span>Messages</span>
+                    </button> -->
+                    <button pTooltip="Cerrar Sesión" tooltipPosition="left" type="button" class="layout-topbar-action" (click)="onLogout()">
+                        <i class="pi pi-sign-out"></i>
+                        <span>Logout</span>
                     </button>
                 </div>
             </div>
@@ -82,11 +90,18 @@ import { LayoutService } from '../service/layout.service';
     </div>`
 })
 export class AppTopbar {
+    private readonly authService = inject(AuthService);
+    private readonly router = inject(Router);
     items!: MenuItem[];
 
     constructor(public layoutService: LayoutService) {}
 
     toggleDarkMode() {
         this.layoutService.layoutConfig.update((state) => ({ ...state, darkTheme: !state.darkTheme }));
+    }
+
+    onLogout() {
+        this.authService.logout();
+        this.router.navigate(['/auth/login']);
     }
 }
