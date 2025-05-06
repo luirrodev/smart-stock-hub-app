@@ -54,4 +54,21 @@ export class TokenService {
         }
         return false;
     }
+
+    isValidRefreshToken() {
+        const token = this.getRefreshToken();
+        if (!token) {
+            return false;
+        }
+        const decodedToken = jwtDecode(token);
+
+        if (decodedToken && decodedToken?.exp) {
+            const tokenDate = new Date(0);
+            tokenDate.setUTCSeconds(decodedToken.exp);
+            const today = new Date();
+
+            return tokenDate.getTime() > today.getTime();
+        }
+        return false;
+    }
 }
