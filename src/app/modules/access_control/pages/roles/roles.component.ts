@@ -1,20 +1,21 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+
 import { ToolbarModule } from 'primeng/toolbar';
 import { ButtonModule } from 'primeng/button';
-import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table, TableModule } from 'primeng/table';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
-import { Role, UpdateRoleDto } from '../../models/roles.model';
-import { RoleService } from '../service/roles.service';
-import { DialogModule } from 'primeng/dialog';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { CreateRoleDto } from '../../models/roles.model';
-import { MessageModule } from 'primeng/message';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
+import { MessageModule } from 'primeng/message';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DialogModule } from 'primeng/dialog';
+
+import { Role, CreateRoleDto, UpdateRoleDto } from '@models/roles.model';
+import { RoleService } from '@services/roles.service';
 
 interface Column {
     field: string;

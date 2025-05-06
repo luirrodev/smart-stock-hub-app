@@ -26,8 +26,11 @@ export class AppMenu {
             },
             {
                 label: 'Control de Acceso',
-                routerLink: ['/pages'],
-                items: [{ label: 'Roles', icon: 'pi pi-fw pi-shield', routerLink: ['pages/roles'] }]
+                routerLink: ['/access-control'],
+                items: [
+                    { label: 'Roles', icon: 'pi pi-fw pi-shield', routerLink: ['access-control/roles'] },
+                    { label: 'Users', icon: 'pi pi-fw pi-users', routerLink: ['access-control/users'] }
+                ]
             },
             // {
             //     label: 'Control de Acceso',

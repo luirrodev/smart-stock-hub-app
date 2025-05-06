@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { CreateRoleDto, Role, UpdateRoleDto } from '../../models/roles.model';
+
+import { CreateRoleDto, Role, UpdateRoleDto } from '@models/roles.model';
 
 @Injectable({
     providedIn: 'root'

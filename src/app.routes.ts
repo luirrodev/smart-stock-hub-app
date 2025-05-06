@@ -12,6 +12,7 @@ export const appRoutes: Routes = [
         component: AppLayout,
         children: [
             { path: '', component: Dashboard },
+            { path: 'access-control', loadChildren: () => import('./app/modules/access_control/access-control.routes') },
             { path: 'pages', loadChildren: () => import('./app/pages/pages.routes') }
         ]
     },
