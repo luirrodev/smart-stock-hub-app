@@ -1,21 +1,30 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { RippleModule } from 'primeng/ripple';
 
+import { AuthService } from '../../../services/auth.service';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+
 @Component({
     selector: 'app-login-form',
     standalone: true,
     templateUrl: './login-form.component.html',
-    imports: [CommonModule, ButtonModule, CheckboxModule, InputTextModule, PasswordModule, ReactiveFormsModule, RouterModule, RippleModule]
+    imports: [ToastModule, CommonModule, ButtonModule, CheckboxModule, InputTextModule, PasswordModule, ReactiveFormsModule, RouterModule, RippleModule],
+    providers: [MessageService]
 })
 export class LoginFormComponent implements OnInit {
     loginForm!: FormGroup;
+    status: 'success' | 'loading' | 'failed' | null = null;
+    private readonly router = inject(Router);
+    private readonly messageService = inject(MessageService);
+    private readonly authService = inject(AuthService);
 
     constructor(private fb: FormBuilder) {}
 
@@ -32,8 +41,24 @@ export class LoginFormComponent implements OnInit {
 
     onSubmit(): void {
         if (this.loginForm.valid) {
-            console.log('Form submitted:', this.loginForm.value);
-            // Implementar lógica de autenticación aquí
+            this.status = 'loading';
+            const { email, password } = this.loginForm.value;
+            this.authService.login(email, password).subscribe({
+                next: () => {
+                    this.status = 'success';
+                    this.router.navigate(['/']);
+                },
+                error: (err) => {
+                    this.status = 'failed';
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Error',
+                        detail: 'Usuario o contraseña incorrectos',
+                        life: 3000
+                    });
+                    this.loginForm.reset();
+                }
+            });
         } else {
             this.loginForm.markAllAsTouched();
         }
