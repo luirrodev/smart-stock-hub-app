@@ -1,9 +1,20 @@
-<form class="mt-4">
-    <label for="email" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Correo Electrónico: </label>
-    <input pInputText id="email" type="text" placeholder="email@admin.com " class="w-full md:w-[30rem] mb-8" [(ngModel)]="email" />
+<form class="mt-4" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <div class="flex flex-col mb-5">
+        <label for="email" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Correo Electrónico: </label>
+        <input id="email" type="text" formControlName="email" pInputText placeholder="email@admin.com" class="w-full md:w-[30rem]" />
+        <small class="mt-1 text-red-800" *ngIf="emailControl?.invalid && emailControl?.touched">
+            <span *ngIf="emailControl?.errors?.['required']">Email es requerido.</span>
+            <span *ngIf="emailControl?.errors?.['email']">Ingrese un email válido.</span>
+        </small>
+    </div>
 
-    <label for="password" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Contraseña:</label>
-    <p-password id="password" [(ngModel)]="password" placeholder="my_secret_password" [toggleMask]="true" styleClass="mb-4" [fluid]="true" [feedback]="false"></p-password>
+    <div class="flex flex-col mb-5">
+        <label for="password" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Contraseña:</label>
+        <p-password formControlName="password" id="password" placeholder="my_secret_password" [toggleMask]="true" [fluid]="true" [feedback]="false"> </p-password>
+        <small class="mt-1 text-red-800" *ngIf="passwordControl?.invalid && passwordControl?.touched">
+            <span *ngIf="passwordControl?.errors?.['required']">Contraseña es requerida.</span>
+        </small>
+    </div>
 
-    <p-button label="Iniciar Sesión" styleClass="w-full mt-4" routerLink="/"></p-button>
+    <p-button type="submit" label="Iniciar Sesión" pRipple styleClass="w-full mt-4" [disabled]="loginForm.invalid"> </p-button>
 </form>
