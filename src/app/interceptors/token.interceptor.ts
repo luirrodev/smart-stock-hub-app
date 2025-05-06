@@ -17,10 +17,8 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
     if (req.context.get(CHECK_TOKEN)) {
         const isValidToken = tokenService.isValidToken();
         if (isValidToken) {
-            console.log('Token is valid, adding token to request...');
             return addToken(req, next, tokenService);
         } else {
-            console.log('Token expired, refreshing token...');
             return updateToken(req, next, tokenService);
         }
     }
