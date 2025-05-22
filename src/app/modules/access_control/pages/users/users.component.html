@@ -9,7 +9,7 @@
     [value]="users()"
     [rows]="5"
     [paginator]="true"
-    [globalFilterFields]="['name', 'description']"
+    [globalFilterFields]="['name', 'email', 'role.description']"
     [tableStyle]="{ 'min-width': '75rem' }"
     [rowHover]="true"
     dataKey="id"
@@ -32,13 +32,13 @@
                 Nombre
                 <p-sortIcon field="name" />
             </th>
-            <th pSortableColumn="name" style="min-width: 16rem">
+            <th pSortableColumn="email" style="min-width: 16rem">
                 Correo
-                <p-sortIcon field="name" />
+                <p-sortIcon field="email" />
             </th>
-            <th pSortableColumn="description" style="min-width: 16rem">
+            <th pSortableColumn="role.description" style="min-width: 16rem">
                 Rol
-                <p-sortIcon field="description" />
+                <p-sortIcon field="role.description" />
             </th>
             <th style="min-width: 16rem">Acciones</th>
         </tr>
@@ -55,5 +55,69 @@
         </tr>
     </ng-template>
 </p-table>
+
+<!-- User Dialog -->
+<p-dialog [(visible)]="userDialog" [style]="{ width: '600px', height: 'auto' }" [header]="isEditMode() ? 'Editar Usuario' : 'Insertar Usuario'" [modal]="true" [draggable]="false" [resizable]="false">
+    <ng-template #content>
+        <div class="flex flex-col gap-6">
+            <div class="flex gap-3">
+                <div class="flex flex-col w-full">
+                    <label for="name" class="block font-bold mb-3">Nombre <span class="text-red-500">*</span></label>
+                    <input type="text" pInputText id="name" [(ngModel)]="user.name" required autofocus fluid [class.p-invalid]="submitted() && !user.name?.trim()" />
+                    @if (submitted() && !user.name?.trim()) {
+                        <small class="text-red-500">El campo nombre es obligatorio.</small>
+                    }
+                </div>
+                <div class="flex flex-col w-full">
+                    <label for="role" class="block font-bold mb-3">Rol <span class="text-red-500">*</span></label>
+                    <p-dropdown
+                        id="role"
+                        [(ngModel)]="user.role"
+                        [options]="roles()"
+                        optionLabel="description"
+                        optionValue="id"
+                        placeholder="Seleccione un rol"
+                        fluid
+                        [class.p-invalid]="submitted() && !user.role"
+                        appendTo="body"
+                        [scrollHeight]="'200px'"
+                        [filter]="true"
+                        filterPlaceholder="Buscar rol..."
+                    />
+                    @if (submitted() && !user.role) {
+                        <small class="text-red-500">El campo rol es obligatorio.</small>
+                    }
+                </div>
+            </div>
+
+            <div class="flex gap-3">
+                <div class="flex flex-col w-full">
+                    <label for="email" class="block font-bold mb-3">Correo Electrónico <span class="text-red-500">*</span></label>
+                    <input type="email" pInputText id="email" [(ngModel)]="user.email" required fluid [class.p-invalid]="submitted() && !user.email?.trim()" />
+                    @if (submitted() && !user.email?.trim()) {
+                        <small class="text-red-500">El campo correo electrónico es obligatorio.</small>
+                    }
+                </div>
+                <div class="flex flex-col w-full">
+                    <label for="password" class="block font-bold mb-3">
+                        Contraseña
+                        @if (!isEditMode()) {
+                            <span class="text-red-500">*</span>
+                        }
+                    </label>
+                    <input type="password" pInputText id="password" [(ngModel)]="user.password" [required]="!isEditMode()" fluid [class.p-invalid]="submitted() && !isEditMode() && !user.password" [disabled]="isEditMode()" />
+                    @if (submitted() && !isEditMode() && !user.password) {
+                        <small class="text-red-500">La contraseña es obligatoria para crear un usuario.</small>
+                    }
+                </div>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template #footer>
+        <p-button label="Cancelar" icon="pi pi-times" text (click)="hideDialog()" />
+        <p-button label="Guardar" icon="pi pi-check" (click)="saveUser()" />
+    </ng-template>
+</p-dialog>
 
 <p-toast />
