@@ -120,7 +120,7 @@ export class UsersComponent implements OnInit {
                     this.messageService.add({
                         severity: 'error',
                         summary: 'Error',
-                        detail: 'Error al eliminar usuario'
+                        detail: error.error.message || 'Error al eliminar usuario'
                     });
                 }
             });
