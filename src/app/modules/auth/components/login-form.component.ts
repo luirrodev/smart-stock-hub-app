@@ -53,7 +53,7 @@ export class LoginFormComponent implements OnInit {
                     this.messageService.add({
                         severity: 'error',
                         summary: 'Error',
-                        detail: 'Usuario o contraseña incorrectos',
+                        detail: err.error.message || 'Error al iniciar sesión',
                         life: 3000
                     });
                     this.loginForm.reset();
